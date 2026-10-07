@@ -55,7 +55,7 @@ header.scrolled{border-bottom-color:rgba(20,20,20,.07)}
 .brand .me{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--blue);font-size:1.06em}
 .brand .caret{display:inline-block;width:2px;height:.92em;background:var(--blue);margin-left:3px;vertical-align:-.08em;animation:blink 1.4s ease-in-out infinite}
 @keyframes blink{0%,42%{opacity:1}55%,92%{opacity:0}100%{opacity:1}}
-.navlink{display:inline-block;text-decoration:none;font-size:14px;font-weight:400;color:var(--fg);background:none;border:0;cursor:pointer;font-family:var(--sans);letter-spacing:.01em;position:relative;padding:4px 0}
+.navlink{display:inline-block;text-decoration:none;font-size:18px;font-weight:400;color:var(--fg);background:none;border:0;cursor:pointer;font-family:var(--sans);letter-spacing:.01em;position:relative;padding:4px 0}
 .navlink::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--blue);transition:width .4s cubic-bezier(.2,.7,.2,1)}
 .navlink:hover::after{width:100%}
 
@@ -187,7 +187,7 @@ footer{
   <button class="brand" id="brandTop" aria-label="boleo.me — back to top">
     <span class="b">boleo</span><span class="me">.me</span><span class="caret" aria-hidden="true"></span>
   </button>
-  <a class="navlink" href="mailto:hello@boleo.me">Contact</a>
+  <a class="navlink" href="#contact">Contact</a>
 </header>
 
 <main>
@@ -218,7 +218,7 @@ footer{
     </div>
   </section>
 
-  <section>
+  <section> id="contact"
     <div class="block cta-wrap">
       <p class="st reveal" style="margin-bottom:4px">Let's get in <span class="kw">touch</span>.</p>
       <a class="btn" href="mailto:hello@boleo.me">Say hello</a>
