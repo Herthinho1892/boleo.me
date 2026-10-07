@@ -27,12 +27,12 @@ body{
   text-rendering:optimizeLegibility;
   overflow-x:hidden;
 }
-::selection{background:var(--blue);color:#FCF5E1}
+::selection{background:var(--blue);color:#FCFBE1}
 
 /* custom dot cursor (fine-pointer devices only; toggled on by JS) */
-#dot{position:fixed;top:0;left:0;width:12px;height:12px;border-radius:50%;background:var(--blue);pointer-events:none;z-index:200;transform:translate3d(-50%,-50%,0);opacity:0;transition:opacity .25s ease,width .22s cubic-bezier(.2,.7,.2,1),height .22s cubic-bezier(.2,.7,.2,1)}
+#dot{position:fixed;top:0;left:0;width:18px;height:18px;border-radius:50%;background:var(--blue);pointer-events:none;z-index:200;transform:translate3d(-50%,-50%,0);opacity:0;transition:opacity .25s ease,width .22s cubic-bezier(.2,.7,.2,1),height .22s cubic-bezier(.2,.7,.2,1)}
 .cursor-on #dot{opacity:1}
-.cursor-on #dot.big{width:34px;height:34px;background:rgba(0,12,247,.14);border:1.5px solid var(--blue)}
+.cursor-on #dot.big{width:32px;height:32px;background:rgba(0,12,247,.14);border:1.5px solid var(--blue)}
 .cursor-on,.cursor-on *{cursor:none!important}
 
 /* scroll progress hairline */
@@ -67,7 +67,7 @@ section{
   padding:104px clamp(20px,5vw,64px) 60px;
 }
 .st{
-  font-weight:700;
+  font-weight:300;
   letter-spacing:-.035em;
   line-height:1.04;
   font-size:clamp(2.4rem,7.2vw,6.4rem);
