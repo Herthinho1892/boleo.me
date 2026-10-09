@@ -50,14 +50,16 @@ header{
   transition:border-color .3s ease;
 }
 header.scrolled{border-bottom-color:rgba(20,20,20,.07)}
-.brand{font-size:36px;letter-spacing:-.02em;line-height:1;cursor:pointer;background:none;border:0;padding:0;color:var(--fg);font-family:var(--sans)}
+.brand{font-size:36px;letter-spacing:line-height:1;cursor:pointer;background:none;border:0;padding:0;color:var(--fg);font-family:var(--sans)}
 .brand .b{font-weight:300}
 .brand .me{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--blue);font-size:1.06em}
-.brand .caret{display:inline-block;width:2px;height:.92em;background:var(--blue);margin-left:3px;vertical-align:-.08em;animation:blink 1.4s ease-in-out infinite}
-@keyframes blink{0%,42%{opacity:1}55%,92%{opacity:0}100%{opacity:1}}
-.navlink{display:inline-block;text-decoration:none;font-size:18px;font-weight:400;color:var(--fg);background:none;border:0;cursor:pointer;font-family:var(--sans);letter-spacing:.01em;position:relative;padding:4px 0}
-.navlink::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--blue);transition:width .4s cubic-bezier(.2,.7,.2,1)}
-.navlink:hover::after{width:100%}
+.brand .caret {
+  display: inline-block;
+  width: 1.5px;
+  height: 0.68em;
+  background: #141414;
+  margin-left: 3px;;
+  animation: blink 1.4s ease-in-out infinite;}
 
 /* statement sections */
 main{width:100%}
