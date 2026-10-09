@@ -29,10 +29,13 @@ body{
 }
 ::selection{background:var(--blue);color:#FCFBE1}
 
-/* custom dot cursor (fine-pointer devices only; toggled on by JS) */
-#dot{position:fixed;top:0;left:0;width:18px;height:18px;border-radius:50%;background:var(--blue);pointer-events:none;z-index:200;transform:translate3d(-50%,-50%,0);opacity:0;transition:opacity .25s ease,width .22s cubic-bezier(.2,.7,.2,1),height .22s cubic-bezier(.2,.7,.2,1)}
-.cursor-on #dot{opacity:1}
-.cursor-on #dot.big{width:32px;height:32px;background:rgba(0,12,247,.14);border:1.5px solid var(--blue)}
+/* custom dot cursor (fine-pointer devices only; toggled on by JS)
+   two stacked blend layers: difference flips cream to black and text to cream,
+   lighten then fills the black with the dot blue while cream text stays cream */
+.dot{position:fixed;top:0;left:0;border-radius:50%;pointer-events:none;z-index:200;transform:translate3d(-50%,-50%,0);opacity:0;transition:opacity .25s ease}
+#dot{width:18px;height:18px;background:var(--bg);mix-blend-mode:difference}
+#dot-tint{width:20px;height:20px;background:#1924DB;mix-blend-mode:lighten}
+.cursor-on .dot{opacity:1}
 .cursor-on,.cursor-on *{cursor:none!important}
 
 /* scroll progress hairline */
@@ -95,7 +98,7 @@ header.scrolled {
 .navlink {
   display: inline-block;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 21px;
   font-weight: 400;
   color: var(--fg);
   background: none;
@@ -125,21 +128,24 @@ header.scrolled {
 /* statement sections */
 main{width:100%}
 section{
-  min-height:78svh;
+  min-height:62svh;
   display:flex;flex-direction:column;justify-content:center;
-  padding:104px clamp(20px,5vw,64px) 60px;
+  padding:72px clamp(20px,5vw,64px) 36px;
 }
+section.hero{padding-top:246px}
+section.right{align-items:flex-end}
 .st{
   font-weight:300;
   letter-spacing:-.035em;
   line-height:1.04;
-  font-size:clamp(2.4rem,7.2vw,6.4rem);
+  font-size:clamp(2rem,6vw,5.4rem);
   max-width:16ch;
   margin:0;
   text-wrap:balance;
 }
 .st-hero{
   font-weight:600;
+  font-size:clamp(2.4rem,7.2vw,6.4rem);
 }
 .kw{
   font-family:var(--serif);
@@ -148,7 +154,8 @@ section{
   color:var(--blue);
   letter-spacing:-.01em;
 }
-.slot{display:inline-block;white-space:nowrap;transition:width .55s cubic-bezier(.2,.7,.2,1)}
+.slot{display:inline-block;white-space:nowrap;text-align:left}
+.nb{white-space:nowrap}
 .sub{
   font-family:var(--sans);font-weight:300;font-style:italic;color:var(--fg);
   font-size:clamp(1.02rem,1.9vw,1.45rem);line-height:1.5;letter-spacing:-.01em;
@@ -177,7 +184,7 @@ section{
 
 /* footer */
 footer{
-  padding:20px clamp(20px,5vw,64px) calc(20px + env(safe-area-inset-bottom,0px));
+  padding:10px clamp(20px,5vw,64px) calc(10px + env(safe-area-inset-bottom,0px));
   display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;
   border-top:1px solid var(--line);
   font-size:13px;color:var(--muted);
@@ -240,14 +247,19 @@ footer{
   .brand .caret{animation:none}
   .sheet{transition:transform .001s}
 }
+@media (max-width:560px),(orientation:portrait){
+  section.right{align-items:flex-start}
+}
 @media (max-width:560px){
-  .st{font-size:clamp(2.1rem,10vw,3.4rem);max-width:14ch}
-  section{min-height:92svh}
+  .st{font-size:clamp(1.75rem,8.4vw,2.9rem);max-width:14ch}
+  .st-hero{font-size:clamp(2.1rem,10vw,3.4rem)}
+  section{min-height:74svh}
 }
 </style>
 
 <div id="prog" aria-hidden="true"></div>
-<div id="dot" aria-hidden="true"></div>
+<div class="dot" id="dot" aria-hidden="true"></div>
+<div class="dot" id="dot-tint" aria-hidden="true"></div>
 
 <header>
   <button class="brand" id="brandTop" aria-label="boleo.me — back to top">
@@ -257,12 +269,12 @@ footer{
 </header>
 
 <main>
-  <section>
+  <section class="hero">
     <div class="block">
-    <p class="st st-hero reveal" data-rotate>Digital experiences to <span class="slot kw" id="slot" aria-label="connect., convert., inspire., grow.">connect</span></p>    </div>
+    <p class="st st-hero reveal" data-rotate>Digital<br>experiences<br><span class="nb">to <span class="slot kw" id="slot" aria-label="connect., convert., inspire., grow.">connect.</span></span></p>    </div>
   </section>
 
-  <section>
+  <section class="right">
     <div class="block">
       <p class="st reveal">Consulting and <span class="kw">execution.</span></p>
       <p class="sub">From defining the right direction to bringing it to life. Involved from strategy through delivery.</p>
@@ -276,7 +288,7 @@ footer{
     </div>
   </section>
 
-  <section>
+  <section class="right">
     <div class="block">
       <p class="st reveal">From first idea to final <span class="kw">pixel.</span></p>
       <p class="sub">Taking ideas from early thinking to a fully realised digital experience, connecting every decision along the way.</p>
@@ -358,6 +370,8 @@ document.querySelectorAll('.reveal').forEach(function(p){
         if(tok.trim()===''){p.appendChild(document.createTextNode(tok));}
         else{var s=document.createElement('span');s.className='w';s.textContent=tok;p.appendChild(s);}
       });
+    }else if(n.nodeName==='BR'){
+      p.appendChild(n);
     }else if(n.classList&&n.classList.contains('slot')){
       var w=document.createElement('span');w.className='w';w.appendChild(n);p.appendChild(w);
     }else{
@@ -387,32 +401,65 @@ var io=new IntersectionObserver(function(es){
 var reveals=document.querySelectorAll('.reveal');
 reveals.forEach(function(p,i){ if(i===0){reveal(p);} else {io.observe(p);} });
 
-/* rotating keyword — blur swap */
+/* rotating keyword — typewriter */
 var slot=document.getElementById('slot');
 if(slot){
   var WORDS=['connect.','convert.','inspire.','grow.'];
-  var i=0;
   var meas=document.createElement('span');
+  meas.className='kw';meas.setAttribute('aria-hidden','true');
   meas.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;left:-9999px';
-  meas.className='kw';document.body.appendChild(meas);
-  function fit(w){meas.textContent=w;meas.style.font=getComputedStyle(slot).font;slot.style.width=(meas.getBoundingClientRect().width+2)+'px';}
-  function setW(w){fit(w);slot.textContent=w;}
-  window.addEventListener('load',function(){setTimeout(function(){fit(WORDS[0]);},60);});
-  setTimeout(function(){fit(WORDS[0]);},400);
-  if(!reduce){
-    setInterval(function(){
-      slot.style.transition='filter .4s ease,opacity .4s ease,width .55s cubic-bezier(.2,.7,.2,1)';
-      slot.style.filter='blur(10px)';slot.style.opacity='0';
-      setTimeout(function(){
-        i=(i+1)%WORDS.length;setW(WORDS[i]);
-        slot.style.filter='blur(10px)';slot.style.opacity='0';
-        requestAnimationFrame(function(){requestAnimationFrame(function(){
-          slot.style.filter='blur(0)';slot.style.opacity='1';
-        });});
-      },440);
-    },2900);
+  document.body.appendChild(meas);
+  function fit(){
+    meas.style.font=getComputedStyle(slot).font;
+    var max=0;
+    WORDS.forEach(function(w){meas.textContent=w;max=Math.max(max,meas.getBoundingClientRect().width);});
+    slot.style.width=Math.ceil(max)+'px';
+  }
+  fit();
+  if(document.fonts)document.fonts.ready.then(fit);
+  addEventListener('resize',fit,{passive:true});
+  if(reduce){
+    slot.textContent=WORDS[0];
+  }else{
+    slot.textContent='';
+    var wi=0,ci=0,typing=true;
+    function step(){
+      var w=WORDS[wi];
+      if(typing){
+        ci++;slot.textContent=w.slice(0,ci);
+        if(ci===w.length){typing=false;setTimeout(step,1500);return;}
+        setTimeout(step,85);
+      }else{
+        ci--;slot.textContent=w.slice(0,ci);
+        if(ci===0){typing=true;wi=(wi+1)%WORDS.length;setTimeout(step,260);return;}
+        setTimeout(step,45);
+      }
+    }
+    setTimeout(step,600);
   }
 }
+
+/* right-side blocks: shrink to the longest rendered line so the text's right edge
+   sits on the page margin (offsets ignore the reveal transforms) */
+var rightBlocks=document.querySelectorAll('section.right .block');
+function fitRight(){
+  rightBlocks.forEach(function(b){
+    b.style.width='';
+    var base=b.offsetLeft,max=0;
+    b.querySelectorAll('.w').forEach(function(w){max=Math.max(max,w.offsetLeft+w.offsetWidth-base);});
+    b.querySelectorAll('.sub').forEach(function(s){
+      var r=document.createRange();r.selectNodeContents(s);
+      var left=s.getBoundingClientRect().left,off=s.offsetLeft-base;
+      Array.prototype.forEach.call(r.getClientRects(),function(c){max=Math.max(max,c.right-left+off);});
+    });
+    if(max)b.style.width=Math.ceil(max)+'px';
+  });
+}
+var fitQueued=false;
+function queueFit(){if(!fitQueued){fitQueued=true;requestAnimationFrame(function(){fitQueued=false;fitRight();});}}
+fitRight();
+if(document.fonts)document.fonts.ready.then(fitRight);
+addEventListener('resize',queueFit,{passive:true});
 
 /* scroll progress */
 var prog=document.getElementById('prog');
@@ -452,21 +499,19 @@ document.getElementById('brandTop').addEventListener('click',function(){scrollTo
 
 /* custom dot cursor — only where there is a real mouse */
 if(matchMedia('(hover:hover) and (pointer:fine)').matches){
-  var dot=document.getElementById('dot');
+  var dots=document.querySelectorAll('.dot');
+  function setDots(prop,val){dots.forEach(function(d){d.style[prop]=val;});}
   root.classList.add('cursor-on');
   var dx=innerWidth/2,dy=innerHeight/2,cx=dx,cy=dy;
   addEventListener('mousemove',function(e){dx=e.clientX;dy=e.clientY;},{passive:true});
-  addEventListener('mouseout',function(e){if(!e.relatedTarget)dot.style.opacity='0';});
-  addEventListener('mouseover',function(){dot.style.opacity='';});
+  addEventListener('mouseout',function(e){if(!e.relatedTarget)setDots('opacity','0');});
+  addEventListener('mouseover',function(){setDots('opacity','');});
   function ease(){
     if(reduce){cx=dx;cy=dy;}else{cx+=(dx-cx)*.2;cy+=(dy-cy)*.2;}
-    dot.style.transform='translate3d('+cx+'px,'+cy+'px,0) translate(-50%,-50%)';
+    setDots('transform','translate3d('+cx+'px,'+cy+'px,0) translate(-50%,-50%)');
     requestAnimationFrame(ease);
   }
   requestAnimationFrame(ease);
-  var hoverSel='a,button,input,textarea,.navlink,.brand,.btn,.copy,.close,[data-sheet]';
-  document.addEventListener('mouseover',function(e){if(e.target.closest(hoverSel))dot.classList.add('big');});
-  document.addEventListener('mouseout',function(e){if(e.target.closest(hoverSel))dot.classList.remove('big');});
 }
 
 </script>
